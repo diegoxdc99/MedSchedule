@@ -1,0 +1,75 @@
+{
+    "app": {
+        "title": "MedSchedule",
+        "titleAccent": "Pro"
+    },
+    "nav": {
+        "timeFormat12": "12h",
+        "timeFormat24": "24h"
+    },
+    "config": {
+        "heading": "Configurar Horario",
+        "description": "Define los parámetros del medicamento para generar automáticamente el cronograma.",
+        "sectionPatient": "Paciente y Medicamento",
+        "sectionFrequency": "Frecuencia",
+        "sectionDuration": "Duración",
+        "medicationName": "Nombre del Medicamento",
+        "medicationPlaceholder": "ej. Amoxicilina 500mg",
+        "patientName": "Nombre del Paciente",
+        "patientOptional": "(Opcional)",
+        "patientPlaceholder": "ej. Juan Pérez",
+        "startDate": "Fecha de Inicio",
+        "startTime": "Hora de Inicio",
+        "repeatEvery": "Repetir Cada",
+        "hoursUnit": "Horas",
+        "byDays": "Por Días",
+        "byQuantity": "Por Cantidad",
+        "daysTotal": "Días en total",
+        "dosesTotal": "Dosis en total",
+        "generateSchedule": "Generar Horario",
+        "estimatedEnd": "Fin Estimado"
+    },
+    "schedule": {
+        "heading": "Horario de Medicación",
+        "forPatient": "Para:",
+        "columnNumber": "#",
+        "columnDate": "Fecha",
+        "columnTime": "Hora",
+        "columnStatus": "Estado",
+        "columnActions": "Acciones",
+        "taken": "Tomada",
+        "pending": "Pendiente",
+        "removeLast": "Quitar Última",
+        "exportCalendar": "Exportar a Calendario",
+        "googleCalendar": "Google Calendar",
+        "outlook": "Outlook",
+        "downloadIcs": "Descargar Calendario",
+        "printPdf": "Imprimir / PDF",
+        "addDose": "Agregar Dosis Manual",
+        "legendMorning": "Mañana (5am - 12pm)",
+        "legendAfternoon": "Tarde (12pm - 6pm)",
+        "legendNight": "Noche (6pm - 5am)"
+    },
+    "pdf": {
+        "dialogTitle": "Opciones de Exportación PDF",
+        "oneColumn": "1 Columna",
+        "twoColumns": "2 Columnas",
+        "layoutLabel": "Diseño",
+        "export": "Exportar PDF",
+        "cancel": "Cancelar",
+        "headerTitle": "Horario de Medicación",
+        "medication": "Medicamento",
+        "patient": "Paciente",
+        "period": "Período",
+        "doseNumber": "#",
+        "date": "Fecha",
+        "time": "Hora",
+        "status": "Estado",
+        "footer": "¡Mantente al día con tu medicación! 💊"
+    },
+    "validation": {
+        "medicationRequired": "Por favor ingresa el nombre del medicamento.",
+        "invalidInterval": "Por favor ingresa un intervalo válido (mayor a 0).",
+        "invalidDuration": "Por favor ingresa una duración válida (mayor a 0)."
+    }
+}

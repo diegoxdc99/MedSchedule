@@ -1,0 +1,362 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+/* ─── CRITICAL: Class-based dark mode ─── */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Design Tokens ──────────────────────────────────────────── */
+@theme {
+  --font-display: 'Manrope', sans-serif;
+
+  /* Shadows */
+  --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 15px rgba(37, 175, 244, 0.3);
+  --shadow-dark-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+
+  /* Colors defined via CSS variables for dynamic switching */
+  --color-primary: var(--color-primary);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-primary-light: var(--color-primary-light);
+  --color-background-light: var(--color-background-light);
+  --color-background-dark: var(--color-background-dark);
+  --color-surface-light: var(--color-surface-light);
+  --color-surface-dark: var(--color-surface-dark);
+  --color-text-primary-light: var(--color-text-primary-light);
+  --color-text-secondary-light: var(--color-text-secondary-light);
+  --color-text-primary-dark: var(--color-text-primary-dark);
+  --color-text-secondary-dark: var(--color-text-secondary-dark);
+  --color-border-dark: var(--color-border-dark);
+}
+
+/* ─── Root Variables ─────────────────────────────────────────── */
+:root {
+  /* Light Theme (from code-claro.html) */
+  --color-primary: #25aff4;
+  --color-primary-dark: #0a95dd;
+  --color-primary-light: #dcf2fe;
+
+  --color-background-light: #f5f7f8;
+  /* Main BG for Light */
+  --color-background-dark: #101c22;
+  /* Unused in light, but defined */
+
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #1a2a32;
+
+  --color-text-primary-light: #1e293b;
+  --color-text-secondary-light: #64748b;
+  --color-text-primary-dark: #f1f5f9;
+  --color-text-secondary-dark: #94a3b8;
+
+  --color-border-dark: #334155;
+}
+
+.dark {
+  /* Dark Theme (from code-oscuro.html) */
+  --color-primary: #3b82f6;
+  /* Blue instead of Cyan */
+  --color-primary-dark: #2563eb;
+  --color-primary-light: #eff6ff;
+
+  --color-background-light: #f5f7f8;
+  /* Kept for reference */
+  --color-background-dark: #0f172a;
+  /* Main BG for Dark */
+
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #1e293b;
+
+  /* Text colors remain consistent but verified */
+  --color-text-primary-light: #1e293b;
+  --color-text-secondary-light: #64748b;
+  --color-text-primary-dark: #f1f5f9;
+  --color-text-secondary-dark: #94a3b8;
+}
+
+/* ─── Base Layout ────────────────────────────────────────────── */
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-background-light);
+  color: var(--color-text-primary-light);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background-color: var(--color-background-dark);
+  color: var(--color-text-primary-dark);
+}
+
+#root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Official Forms Plugin Emulation ────────────────────────── */
+/* Replicates the exact styles from @tailwindcss/forms */
+
+[type='text'],
+[type='email'],
+[type='url'],
+[type='password'],
+[type='number'],
+[type='date'],
+[type='datetime-local'],
+[type='month'],
+[type='search'],
+[type='tel'],
+[type='time'],
+[type='week'],
+[multiple],
+textarea,
+select {
+  appearance: none;
+  background-color: #fff;
+  border-color: #6b7280;
+  border-width: 1px;
+  border-radius: 0.5rem;
+  padding-top: 0.75rem;
+  padding-right: 1rem;
+  padding-bottom: 0.75rem;
+  padding-left: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-shadow: 0 0 #0000;
+}
+
+[type='text']:focus,
+[type='email']:focus,
+[type='url']:focus,
+[type='password']:focus,
+[type='number']:focus,
+[type='date']:focus,
+[type='datetime-local']:focus,
+[type='month']:focus,
+[type='search']:focus,
+[type='tel']:focus,
+[type='time']:focus,
+[type='week']:focus,
+[multiple]:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-inset: var(--tw-empty,
+      /*!*/
+      /*!*/
+    );
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: var(--color-primary);
+  /* Uses theme color */
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  border-color: var(--color-primary);
+}
+
+/* Dark mode overrides for inputs */
+.dark [type='text'],
+.dark [type='number'],
+.dark [type='date'],
+.dark [type='time'] {
+  background-color: rgba(30, 41, 59, 0.5);
+  /* slightly transparent slate-800 */
+  border-color: #475569;
+  color: #f1f5f9;
+  color-scheme: dark;
+}
+
+/* Radio Buttons */
+[type='radio'] {
+  appearance: none;
+  padding: 0;
+  print-color-adjust: exact;
+  display: inline-block;
+  vertical-align: middle;
+  background-origin: border-box;
+  user-select: none;
+  flex-shrink: 0;
+  height: 1rem;
+  width: 1rem;
+  color: var(--color-primary);
+  background-color: #fff;
+  border-color: #6b7280;
+  border-width: 1px;
+  border-radius: 100%;
+}
+
+[type='radio']:checked {
+  border-color: transparent;
+  background-color: currentColor;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+}
+
+[type='radio']:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-inset: var(--tw-empty,
+      /*!*/
+      /*!*/
+    );
+  --tw-ring-offset-width: 2px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: var(--color-primary);
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+
+.dark [type='radio'] {
+  border-color: #64748b;
+  background-color: transparent;
+  color: var(--color-primary);
+}
+
+/* ─── Checkbox (custom styles for this app) ─── */
+[type='checkbox'] {
+  appearance: none;
+  padding: 0;
+  print-color-adjust: exact;
+  display: inline-block;
+  vertical-align: middle;
+  background-origin: border-box;
+  user-select: none;
+  flex-shrink: 0;
+  height: 1.25rem;
+  width: 1.25rem;
+  color: var(--color-primary);
+  background-color: #fff;
+  border-color: #cbd5e1;
+  border-width: 2px;
+  border-radius: 0.375rem;
+}
+
+[type='checkbox']:checked {
+  border-color: transparent;
+  background-color: currentColor;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+}
+
+.dark [type='checkbox'] {
+  background-color: #1e293b;
+  border-color: #475569;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* ─── Print Styles ───────────────────────────────────────────── */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-full-width {
+    width: 100% !important;
+    max-width: none !important;
+    flex: 1 1 100% !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* ─── Animations ─────────────────────────────────────────────── */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-soft {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.animate-shimmer {
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* ─── Toggle Switch ──────────────────────────────────────────── */
+.toggle-checkbox {
+  right: auto;
+  left: 0;
+  transition: all 0.3s ease;
+}
+
+.toggle-checkbox:checked {
+  right: 0;
+  left: auto;
+}

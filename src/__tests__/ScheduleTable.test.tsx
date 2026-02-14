@@ -1,0 +1,154 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
+import ScheduleTable from '../components/ScheduleTable'
+import { type Dose } from '../utils/doseCalculator'
+
+const mockRemoveLastDose = vi.fn()
+const mockAddManualDose = vi.fn()
+
+const testDoses: Dose[] = [
+    { id: 'dose-1', number: 1, dateTime: new Date(2024, 0, 15, 8, 0), taken: false },
+    { id: 'dose-2', number: 2, dateTime: new Date(2024, 0, 15, 16, 0), taken: true },
+]
+
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key: string) => {
+            const map: Record<string, string> = {
+                'schedule.heading': 'Medication Schedule',
+                'schedule.forPatient': 'For:',
+                'schedule.columnNumber': '#',
+                'schedule.columnDate': 'Date',
+                'schedule.columnTime': 'Time',
+                'schedule.columnStatus': 'Status',
+                'schedule.columnActions': 'Actions',
+                'schedule.removeLast': 'Remove Last',
+                'schedule.exportCalendar': 'Export to Calendar',
+                'schedule.googleCalendar': 'Google Calendar',
+                'schedule.outlook': 'Outlook',
+                'schedule.downloadIcs': 'Download .ics',
+                'schedule.printPdf': 'Print / PDF',
+                'schedule.addDose': 'Add Manual Dose',
+                'schedule.taken': 'Taken',
+                'schedule.pending': 'Pending',
+                'config.description': 'Generate your schedule',
+                'pdf.dialogTitle': 'PDF Export',
+                'pdf.layoutLabel': 'Layout',
+                'pdf.oneColumn': '1 Column',
+                'pdf.twoColumns': '2 Columns',
+                'pdf.cancel': 'Cancel',
+                'pdf.export': 'Export PDF',
+                'pdf.headerTitle': 'Schedule',
+                'pdf.medication': 'Med',
+                'pdf.patient': 'Patient',
+                'pdf.period': 'Period',
+                'pdf.doseNumber': '#',
+                'pdf.date': 'Date',
+                'pdf.time': 'Time',
+                'pdf.status': 'Status',
+                'pdf.footer': 'Stay on track!',
+            }
+            return map[key] ?? key
+        },
+    }),
+}))
+
+let storeState = {
+    doses: testDoses,
+    medicationName: 'Amoxicillin',
+    patientName: 'John',
+    removeLastDose: mockRemoveLastDose,
+    addManualDose: mockAddManualDose,
+    use24h: false,
+    language: 'en',
+    toggleDoseTaken: vi.fn(),
+}
+
+vi.mock('../store/useScheduleStore', () => ({
+    useScheduleStore: vi.fn((selector) => {
+        return selector ? selector(storeState) : storeState
+    }),
+}))
+
+vi.mock('../utils/calendarExport', () => ({
+    openGoogleCalendar: vi.fn(),
+    openOutlookCalendar: vi.fn(),
+    downloadIcsFile: vi.fn(),
+    exportToPdf: vi.fn(),
+}))
+
+describe('ScheduleTable', () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+        storeState.doses = testDoses
+    })
+
+    it('should render heading', () => {
+        render(<ScheduleTable />)
+        expect(screen.getByText('Medication Schedule')).toBeInTheDocument()
+    })
+
+    it('should show medication and patient info', () => {
+        render(<ScheduleTable />)
+        expect(screen.getByText('Amoxicillin')).toBeInTheDocument()
+        expect(screen.getByText(/John/)).toBeInTheDocument()
+    })
+
+    it('should render table columns', () => {
+        render(<ScheduleTable />)
+        expect(screen.getByText('#')).toBeInTheDocument()
+        expect(screen.getByText('Date')).toBeInTheDocument()
+        expect(screen.getByText('Time')).toBeInTheDocument()
+        expect(screen.getByText('Status')).toBeInTheDocument()
+    })
+
+    it('should render remove last button', () => {
+        render(<ScheduleTable />)
+        expect(screen.getByTestId('remove-last')).toBeInTheDocument()
+    })
+
+    it('should call removeLastDose when clicked', () => {
+        render(<ScheduleTable />)
+        fireEvent.click(screen.getByTestId('remove-last'))
+        expect(mockRemoveLastDose).toHaveBeenCalled()
+    })
+
+    it('should render add dose button', () => {
+        render(<ScheduleTable />)
+        expect(screen.getByTestId('add-dose')).toBeInTheDocument()
+    })
+
+    it('should call addManualDose when add button clicked', () => {
+        render(<ScheduleTable />)
+        fireEvent.click(screen.getByTestId('add-dose'))
+        expect(mockAddManualDose).toHaveBeenCalled()
+    })
+
+    it('should show empty state when no doses', () => {
+        storeState.doses = []
+        render(<ScheduleTable />)
+        expect(screen.getByText('Generate your schedule')).toBeInTheDocument()
+    })
+
+    it('should render export calendar button', () => {
+        render(<ScheduleTable />)
+        expect(screen.getByTestId('calendar-export-btn')).toBeInTheDocument()
+    })
+
+    it('should render print/pdf button', () => {
+        render(<ScheduleTable />)
+        expect(screen.getByTestId('print-pdf-btn')).toBeInTheDocument()
+    })
+
+    it('should open print dialog when print button clicked', () => {
+        render(<ScheduleTable />)
+        fireEvent.click(screen.getByTestId('print-pdf-btn'))
+        expect(screen.getByText('PDF Export')).toBeInTheDocument()
+    })
+
+    it('should render dose rows for each dose', () => {
+        render(<ScheduleTable />)
+        expect(screen.getByTestId('dose-row-1')).toBeInTheDocument()
+        expect(screen.getByTestId('dose-row-2')).toBeInTheDocument()
+    })
+})

@@ -1,0 +1,9 @@
+services:
+  medschedule:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    container_name: medschedule-pro

@@ -1,0 +1,75 @@
+{
+    "app": {
+        "title": "MedSchedule",
+        "titleAccent": "Pro"
+    },
+    "nav": {
+        "timeFormat12": "12h",
+        "timeFormat24": "24h"
+    },
+    "config": {
+        "heading": "Configure Schedule",
+        "description": "Define the medication parameters to auto-generate the timeline.",
+        "sectionPatient": "Patient & Drug",
+        "sectionFrequency": "Frequency",
+        "sectionDuration": "Duration",
+        "medicationName": "Medication Name",
+        "medicationPlaceholder": "e.g. Amoxicillin 500mg",
+        "patientName": "Patient Name",
+        "patientOptional": "(Optional)",
+        "patientPlaceholder": "e.g. John Doe",
+        "startDate": "Start Date",
+        "startTime": "Start Time",
+        "repeatEvery": "Repeat Every",
+        "hoursUnit": "Hours",
+        "byDays": "By Days",
+        "byQuantity": "By Quantity",
+        "daysTotal": "Days total",
+        "dosesTotal": "Doses total",
+        "generateSchedule": "Generate Schedule",
+        "estimatedEnd": "Estimated End"
+    },
+    "schedule": {
+        "heading": "Medication Schedule",
+        "forPatient": "For:",
+        "columnNumber": "#",
+        "columnDate": "Date",
+        "columnTime": "Time",
+        "columnStatus": "Status",
+        "columnActions": "Actions",
+        "taken": "Taken",
+        "pending": "Pending",
+        "removeLast": "Remove Last",
+        "exportCalendar": "Export to Calendar",
+        "googleCalendar": "Google Calendar",
+        "outlook": "Outlook",
+        "downloadIcs": "Download Calendar",
+        "printPdf": "Print / PDF",
+        "addDose": "Add Manual Dose",
+        "legendMorning": "Morning (5am - 12pm)",
+        "legendAfternoon": "Afternoon (12pm - 6pm)",
+        "legendNight": "Night (6pm - 5am)"
+    },
+    "pdf": {
+        "dialogTitle": "PDF Export Options",
+        "oneColumn": "1 Column",
+        "twoColumns": "2 Columns",
+        "layoutLabel": "Layout",
+        "export": "Export PDF",
+        "cancel": "Cancel",
+        "headerTitle": "Medication Schedule",
+        "medication": "Medication",
+        "patient": "Patient",
+        "period": "Period",
+        "doseNumber": "#",
+        "date": "Date",
+        "time": "Time",
+        "status": "Status",
+        "footer": "Stay on track with your medication! 💊"
+    },
+    "validation": {
+        "medicationRequired": "Please enter the medication name.",
+        "invalidInterval": "Please enter a valid interval (greater than 0).",
+        "invalidDuration": "Please enter a valid duration (greater than 0)."
+    }
+}
