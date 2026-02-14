@@ -26,6 +26,18 @@
   --color-text-primary-dark: var(--color-text-primary-dark);
   --color-text-secondary-dark: var(--color-text-secondary-dark);
   --color-border-dark: var(--color-border-dark);
+
+  /* PDF Design Colors */
+  --color-print-primary: #25aff4;
+  --color-print-accent: #e0f2fe;
+  --color-print-text: #1e293b;
+  --color-print-subtext: #64748b;
+  --color-cheerful-blue: #38bdf8;
+  --color-cheerful-bg: #f0f9ff;
+  --color-happy-green: #4ade80;
+
+  /* Font Families */
+  --font-friendly: 'Fredoka', sans-serif;
 }
 
 /* ─── Root Variables ─────────────────────────────────────────── */

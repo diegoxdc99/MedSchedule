@@ -67,6 +67,19 @@
         "status": "Status",
         "footer": "Stay on track with your medication! 💊"
     },
+    "print": {
+        "title": "MedSchedule",
+        "subtitle": "Your Health Companion",
+        "patient": "Patient",
+        "prescription": "Prescription",
+        "stayHealthy": "Stay Healthy!",
+        "date": "Date",
+        "time": "Time",
+        "done": "Done",
+        "footerQuote": "\"A healthy outside starts from the inside.\"",
+        "printedOn": "Printed on",
+        "page": "Page"
+    },
     "validation": {
         "medicationRequired": "Please enter the medication name.",
         "invalidInterval": "Please enter a valid interval (greater than 0).",
