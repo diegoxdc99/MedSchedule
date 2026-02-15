@@ -10,18 +10,19 @@ interface PrintTemplateProps {
     prescriptionDetails: string
     doses: Dose[]
     layout: '1-col' | '2-col'
+    rowsPerPage?: number
 }
 
-const ITEMS_PER_COL = 13
+const DEFAULT_ROWS = 13
 
 export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
-    ({ patientName, medicationName, prescriptionDetails, doses, layout }, ref) => {
+    ({ patientName, medicationName, prescriptionDetails, doses, layout, rowsPerPage = DEFAULT_ROWS }, ref) => {
         const { t, i18n } = useTranslation()
         const isEs = i18n.language.startsWith('es')
         const dateLocale = isEs ? es : enUS
 
         // Pagination Logic
-        const itemsPerPage = layout === '2-col' ? ITEMS_PER_COL * 2 : ITEMS_PER_COL
+        const itemsPerPage = layout === '2-col' ? rowsPerPage * 2 : rowsPerPage
         const totalPages = Math.ceil(doses.length / itemsPerPage) || 1
 
         const pages = Array.from({ length: totalPages }, (_, i) => {
@@ -65,8 +66,8 @@ export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
                     // Inside page split for columns
                     const columns: Dose[][] = []
                     if (layout === '2-col') {
-                        const left = pageDoses.slice(0, ITEMS_PER_COL)
-                        const right = pageDoses.slice(ITEMS_PER_COL)
+                        const left = pageDoses.slice(0, rowsPerPage)
+                        const right = pageDoses.slice(rowsPerPage)
                         columns.push(left)
                         if (right.length > 0) columns.push(right)
                     } else {

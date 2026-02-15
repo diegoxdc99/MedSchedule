@@ -1,14 +1,13 @@
 import { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import html2canvas from 'html2canvas'
-import { jsPDF } from 'jspdf'
 import { useScheduleStore } from '../store/useScheduleStore'
 import DoseRow from './DoseRow'
 import PrintDialog from './PrintDialog'
 import { PrintTemplate } from './PrintTemplate'
 import { downloadIcsFile } from '../utils/calendarExport'
+import { usePdfExport } from '../hooks/usePdfExport'
 
-export default function ScheduleTable() {
+export const ScheduleTable = () => {
     const { t } = useTranslation()
     const {
         doses,
@@ -21,61 +20,24 @@ export default function ScheduleTable() {
 
     const [showPrintDialog, setShowPrintDialog] = useState(false)
     const [printLayout, setPrintLayout] = useState<'1-col' | '2-col'>('1-col')
-    const [isGeneratingPdf, setIsGeneratingPdf] = useState(false)
     const printRef = useRef<HTMLDivElement>(null)
+
+    // Use custom hook for PDF generation
+    const { exportPdf, isGenerating: isGeneratingPdf, error: pdfError } = usePdfExport()
 
     const handlePdfExport = async (columns: 1 | 2) => {
         setPrintLayout(columns === 1 ? '1-col' : '2-col')
         setShowPrintDialog(false)
-        setIsGeneratingPdf(true)
 
-        // Allow time for state update and render
-        await new Promise((resolve) => setTimeout(resolve, 500))
-
-        if (printRef.current) {
-            try {
-                // Find all page sheets
-                const pages = printRef.current.querySelectorAll('.print-sheet') as NodeListOf<HTMLElement>
-
-                if (pages.length === 0) {
-                    throw new Error('No pages found to print')
-                }
-
-                const pdf = new jsPDF({
-                    orientation: 'portrait',
-                    unit: 'mm',
-                    format: 'a4',
-                })
-
-                for (let i = 0; i < pages.length; i++) {
-                    const page = pages[i]
-
-                    // Capture each page
-                    const canvas = await html2canvas(page, {
-                        scale: 2,
-                        useCORS: true,
-                        logging: false,
-                        backgroundColor: '#ffffff'
-                    })
-
-                    const imgData = canvas.toDataURL('image/png')
-                    const pdfWidth = pdf.internal.pageSize.getWidth()
-                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width
-
-                    // Add page to PDF
-                    if (i > 0) pdf.addPage()
-                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-                }
-
-                pdf.save(`${medicationName.replace(/\s+/g, '_') || 'schedule'}.pdf`)
-            } catch (error) {
-                console.error('Failed to generate PDF', error)
-                const message = error instanceof Error ? error.message : String(error)
-                alert(`Error generating PDF: ${message}`)
-            } finally {
-                setIsGeneratingPdf(false)
+        // Allow render cycle to update layout before capturing
+        setTimeout(async () => {
+            if (printRef.current) {
+                await exportPdf(
+                    printRef.current,
+                    medicationName.replace(/\s+/g, '_') || 'schedule'
+                )
             }
-        }
+        }, 100)
     }
 
     const getPrescriptionDetails = () => {
@@ -85,20 +47,21 @@ export default function ScheduleTable() {
         return ''
     }
 
+    const prescriptionDetails = getPrescriptionDetails();
+
     return (
         <section className="lg:col-span-8 flex flex-col h-full print-full-width relative">
             {/* Hidden Print Template */}
-            <div className="fixed left-[-9999px] top-[-9999px] overflow-hidden">
-                <div className="w-[210mm] min-h-[297mm]">
-                    <PrintTemplate
-                        ref={printRef}
-                        patientName={patientName}
-                        medicationName={medicationName}
-                        prescriptionDetails={getPrescriptionDetails()}
-                        doses={doses}
-                        layout={printLayout}
-                    />
-                </div>
+            <div className="fixed left-[-9999px] top-0">
+                <PrintTemplate
+                    ref={printRef}
+                    patientName={patientName}
+                    medicationName={medicationName}
+                    prescriptionDetails={prescriptionDetails}
+                    doses={doses}
+                    layout={printLayout}
+                    rowsPerPage={13} // Pass explicit rows per page if needed
+                />
             </div>
 
             {/* Header Bar */}
@@ -146,6 +109,13 @@ export default function ScheduleTable() {
                         </span>
                         <span className="hidden sm:inline">{t('schedule.removeLast')}</span>
                     </button>
+
+                    {/* Error Message */}
+                    {pdfError && (
+                        <div className="text-xs text-red-500 font-medium bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-lg border border-red-100 dark:border-red-800 animate-pulse mr-2">
+                            {pdfError}
+                        </div>
+                    )}
 
                     {/* Calendar Download */}
                     <button
