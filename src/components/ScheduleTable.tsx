@@ -1,14 +1,13 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useScheduleStore } from '../store/useScheduleStore'
 import DoseRow from './DoseRow'
 import PrintDialog from './PrintDialog'
-import {
-    downloadIcsFile,
-    exportToPdf,
-} from '../utils/calendarExport'
+import { PrintTemplate } from './PrintTemplate'
+import { downloadIcsFile } from '../utils/calendarExport'
+import { usePdfExport } from '../hooks/usePdfExport'
 
-export default function ScheduleTable() {
+export const ScheduleTable = () => {
     const { t } = useTranslation()
     const {
         doses,
@@ -16,32 +15,55 @@ export default function ScheduleTable() {
         patientName,
         removeLastDose,
         addManualDose,
-        use24h,
-        language,
+        intervalHours,
     } = useScheduleStore()
 
-
     const [showPrintDialog, setShowPrintDialog] = useState(false)
+    const [printLayout, setPrintLayout] = useState<'1-col' | '2-col'>('1-col')
+    const printRef = useRef<HTMLDivElement>(null)
 
-    const handlePdfExport = (columns: 1 | 2) => {
-        exportToPdf(doses, medicationName, patientName, columns, use24h, language, {
-            headerTitle: t('pdf.headerTitle'),
-            medication: t('pdf.medication'),
-            patient: t('pdf.patient'),
-            period: t('pdf.period'),
-            doseNumber: t('pdf.doseNumber'),
-            date: t('pdf.date'),
-            time: t('pdf.time'),
-            status: t('pdf.status'),
-            taken: t('schedule.taken'),
-            pending: t('schedule.pending'),
-            footer: t('pdf.footer'),
-        })
+    // Use custom hook for PDF generation
+    const { exportPdf, isGenerating: isGeneratingPdf, error: pdfError } = usePdfExport()
+
+    const handlePdfExport = async (columns: 1 | 2) => {
+        setPrintLayout(columns === 1 ? '1-col' : '2-col')
         setShowPrintDialog(false)
+
+        // Allow render cycle to update layout before capturing
+        setTimeout(async () => {
+            if (printRef.current) {
+                await exportPdf(
+                    printRef.current,
+                    medicationName.replace(/\s+/g, '_') || 'schedule'
+                )
+            }
+        }, 100)
     }
 
+    const getPrescriptionDetails = () => {
+        if (intervalHours > 0) {
+            return `${t('config.repeatEvery')} ${intervalHours} ${t('config.hoursUnit')}`
+        }
+        return ''
+    }
+
+    const prescriptionDetails = getPrescriptionDetails();
+
     return (
-        <section className="lg:col-span-8 flex flex-col h-full print-full-width">
+        <section className="lg:col-span-8 flex flex-col h-full print-full-width relative">
+            {/* Hidden Print Template */}
+            <div className="fixed left-[-9999px] top-0">
+                <PrintTemplate
+                    ref={printRef}
+                    patientName={patientName}
+                    medicationName={medicationName}
+                    prescriptionDetails={prescriptionDetails}
+                    doses={doses}
+                    layout={printLayout}
+                    rowsPerPage={13} // Pass explicit rows per page if needed
+                />
+            </div>
+
             {/* Header Bar */}
             <div className="relative z-10 bg-white/80 dark:bg-surface-dark/60 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-soft dark:shadow-dark-soft rounded-t-xl border-b-0 p-6 flex flex-col xl:flex-row xl:items-center justify-between gap-4 transition-colors duration-300">
                 <div className="flex items-start gap-4 min-w-0 flex-1">
@@ -78,7 +100,7 @@ export default function ScheduleTable() {
                     {/* Remove Last */}
                     <button
                         onClick={removeLastDose}
-                        disabled={doses.length === 0}
+                        disabled={doses.length === 0 || isGeneratingPdf}
                         className="bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600 text-text-primary-light dark:text-text-primary-dark font-semibold py-2 px-4 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-200 flex items-center gap-2 text-sm disabled:opacity-40 disabled:cursor-not-allowed"
                         data-testid="remove-last"
                     >
@@ -88,11 +110,18 @@ export default function ScheduleTable() {
                         <span className="hidden sm:inline">{t('schedule.removeLast')}</span>
                     </button>
 
+                    {/* Error Message */}
+                    {pdfError && (
+                        <div className="text-xs text-red-500 font-medium bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-lg border border-red-100 dark:border-red-800 animate-pulse mr-2">
+                            {pdfError}
+                        </div>
+                    )}
+
                     {/* Calendar Download */}
                     <button
                         onClick={() => downloadIcsFile(doses, medicationName, patientName)}
                         className="bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 font-semibold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center gap-2 text-sm disabled:opacity-40 disabled:cursor-not-allowed"
-                        disabled={doses.length === 0}
+                        disabled={doses.length === 0 || isGeneratingPdf}
                         data-testid="calendar-export-btn"
                     >
                         <span className="material-icons-round text-lg">event</span>
@@ -102,12 +131,16 @@ export default function ScheduleTable() {
                     {/* Print / PDF */}
                     <button
                         onClick={() => setShowPrintDialog(true)}
-                        disabled={doses.length === 0}
+                        disabled={doses.length === 0 || isGeneratingPdf}
                         className="bg-slate-800 hover:bg-slate-900 text-white dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200 dark:border dark:border-slate-600 font-bold py-2 px-5 rounded-lg shadow-lg flex items-center gap-2 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                         data-testid="print-pdf-btn"
                     >
-                        <span className="material-icons-round">print</span>
-                        <span>{t('schedule.printPdf')}</span>
+                        {isGeneratingPdf ? (
+                            <span className="material-icons-round animate-spin">refresh</span>
+                        ) : (
+                            <span className="material-icons-round">print</span>
+                        )}
+                        <span>{isGeneratingPdf ? 'Generating...' : t('schedule.printPdf')}</span>
                     </button>
                 </div>
             </div>

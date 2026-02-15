@@ -67,6 +67,19 @@
         "status": "Estado",
         "footer": "¡Mantente al día con tu medicación! 💊"
     },
+    "print": {
+        "title": "MedSchedule",
+        "subtitle": "Tu Compañero de Salud",
+        "patient": "Paciente",
+        "prescription": "Prescripción",
+        "stayHealthy": "¡Mantente Sano!",
+        "date": "Fecha",
+        "time": "Hora",
+        "done": "Hecho",
+        "footerQuote": "\"Un exterior saludable comienza desde el interior.\"",
+        "printedOn": "Impreso el",
+        "page": "Página"
+    },
     "validation": {
         "medicationRequired": "Por favor ingresa el nombre del medicamento.",
         "invalidInterval": "Por favor ingresa un intervalo válido (mayor a 0).",
