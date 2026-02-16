@@ -41,7 +41,7 @@ vi.mock('react-i18next', () => ({
     }),
 }))
 
-let storeState: {
+const storeState: {
     medicationName: string
     setMedicationName: typeof mockSetMedicationName
     patientName: string

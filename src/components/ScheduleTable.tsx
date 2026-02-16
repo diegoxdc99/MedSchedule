@@ -65,7 +65,10 @@ export const ScheduleTable = () => {
             </div>
 
             {/* Header Bar */}
-            <div className="relative z-10 bg-white/80 dark:bg-surface-dark/60 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-soft dark:shadow-dark-soft rounded-t-xl border-b-0 p-6 flex flex-col xl:flex-row xl:items-center justify-between gap-4 transition-colors duration-300">
+            <div
+                className="relative z-10 bg-white/80 dark:bg-surface-dark/60 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-soft dark:shadow-dark-soft rounded-t-xl border-b-0 p-6 flex flex-col xl:flex-row xl:items-center justify-between gap-4 transition-colors duration-300"
+                data-testid="schedule-header"
+            >
                 <div className="flex items-start gap-4 min-w-0 flex-1">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30 shrink-0">
                         <span className="material-icons-round text-2xl">calendar_today</span>

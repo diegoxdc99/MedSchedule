@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, within } from '@testing-library/react'
 import { ScheduleTable } from '../components/ScheduleTable'
 import { type Dose } from '../utils/doseCalculator'
 
@@ -13,12 +13,39 @@ const testDoses: Dose[] = [
 
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
-        t: (key: string) => key,
+        t: (key: string) => {
+            const map: Record<string, string> = {
+                'schedule.heading': 'Medication Schedule',
+                'schedule.columnNumber': '#',
+                'schedule.columnDate': 'Date',
+                'schedule.columnTime': 'Time',
+                'schedule.columnStatus': 'Status',
+                'schedule.columnActions': 'Actions',
+                'schedule.removeLast': 'Remove Last',
+                'schedule.addDose': 'Add Dose',
+                'schedule.downloadIcs': 'Download ICS',
+                'schedule.printPdf': 'Print PDF',
+                'config.description': 'Generate your schedule',
+                'schedule.forPatient': 'for',
+                'config.repeatEvery': 'Every',
+                'config.hoursUnit': 'hours',
+                'print.title': 'Print Schedule',
+                'print.subtitle': 'Print Subtitle',
+                'print.patient': 'Print Patient',
+                'print.prescription': 'Print Prescription',
+                'print.stayHealthy': 'Print Healthy',
+                'print.done': 'Print Done',
+                'print.date': 'Print Date',
+                'print.time': 'Print Time',
+                'print.columnNumber': 'Print #',
+            }
+            return map[key] ?? key
+        },
         i18n: { language: 'en' },
     }),
 }))
 
-let storeState = {
+const storeState = {
     doses: testDoses,
     medicationName: 'Amoxicillin',
     patientName: 'John',
@@ -64,8 +91,9 @@ describe('ScheduleTable', () => {
 
     it('should show medication and patient info', () => {
         render(<ScheduleTable />)
-        expect(screen.getByText('Amoxicillin')).toBeInTheDocument()
-        expect(screen.getByText(/John/)).toBeInTheDocument()
+        const header = screen.getByTestId('schedule-header')
+        expect(within(header).getByText('Amoxicillin')).toBeInTheDocument()
+        expect(within(header).getByText(/John/)).toBeInTheDocument()
     })
 
     it('should render table columns', () => {
