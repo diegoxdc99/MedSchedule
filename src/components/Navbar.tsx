@@ -17,9 +17,9 @@ export default function Navbar() {
             <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-glow">
-                            <span className="material-icons-round text-xl">medication</span>
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-10 h-10 flex items-center justify-center transition-transform hover:scale-110 duration-300">
+                            <img src="/favicon.svg" alt="MedSchedule Logo" className="w-full h-full object-contain filter drop-shadow-sm" />
                         </div>
                         <span className="text-xl font-bold tracking-tight">
                             {t('app.title')}{' '}
@@ -34,8 +34,8 @@ export default function Navbar() {
                             <button
                                 onClick={() => handleLanguage('en')}
                                 className={`px-3 py-1 text-xs font-bold rounded-md transition-all duration-200 ${language === 'en'
-                                        ? 'bg-white dark:bg-slate-700 shadow-sm text-primary'
-                                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                                    ? 'bg-white dark:bg-slate-700 shadow-sm text-primary'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
                                     }`}
                                 data-testid="lang-en"
                             >
@@ -44,8 +44,8 @@ export default function Navbar() {
                             <button
                                 onClick={() => handleLanguage('es')}
                                 className={`px-3 py-1 text-xs font-bold rounded-md transition-all duration-200 ${language === 'es'
-                                        ? 'bg-white dark:bg-slate-700 shadow-sm text-primary'
-                                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                                    ? 'bg-white dark:bg-slate-700 shadow-sm text-primary'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
                                     }`}
                                 data-testid="lang-es"
                             >
