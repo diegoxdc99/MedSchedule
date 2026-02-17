@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    
+    <!-- STANDARD BLUR FILTER FOR SHADOW (Commonly supported) -->
+    <!-- We keep it simple: just blur, no offsets inside the filter to avoid complexity -->
+    <filter id="blurShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6" /> <!-- Just a blur -->
+      <!-- We don't use feDropShadow or merge inside here to keep it simple for Inkscape -->
+    </filter>
+  </defs>
+
+  <!-- Background Circle enabled for contrast -->
+  <circle cx="256" cy="256" r="240" fill="url(#grad)" />
+
+  <g transform="translate(256, 256) rotate(-45)">
+    <!-- 1. BLURRED SHADOW LAYER -->
+    <!-- This is a separate black rect, blurred, placed BEHIND the main pill. -->
+    <!-- Inkscape usually handles <feGaussianBlur> much better than <feDropShadow> -->
+    <rect x="-66" y="-116" width="140" height="240" rx="70" ry="70" fill="black" opacity="0.3" filter="url(#blurShadow)" />
+    
+    <!-- 2. Main Pill Body (White) -->
+    <rect x="-70" y="-120" width="140" height="240" rx="70" ry="70" fill="#ffffff" fill-opacity="1" />
+    
+    <!-- 3. Bottom Half Color Overlay (clipped to pill shape) -->
+    <g>
+        <clipPath id="pillClip">
+          <rect x="-70" y="-120" width="140" height="240" rx="70" ry="70" />
+        </clipPath>
+        <rect x="-70" y="0" width="140" height="120" fill="#38bdf8" clip-path="url(#pillClip)" />
+    </g>
+    
+    <!-- 4. Reflection/Shine for volume -->
+    <path d="M -40 -90 Q -20 -110 40 -90" stroke="white" stroke-width="8" stroke-linecap="round" opacity="0.4" fill="none" />
+  </g>
+
+  <!-- Clock Hands -->
+  <line x1="256" y1="256" x2="256" y2="160" stroke="#0c4a6e" stroke-width="24" stroke-linecap="round" />
+  <line x1="256" y1="256" x2="310" y2="256" stroke="#0c4a6e" stroke-width="24" stroke-linecap="round" />
+  
+  <!-- Center Dot -->
+  <circle cx="256" cy="256" r="18" fill="#0c4a6e" />
+
+</svg>
