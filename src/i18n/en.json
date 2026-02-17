@@ -78,7 +78,8 @@
         "done": "Done",
         "footerQuote": "\"A healthy outside starts from the inside.\"",
         "printedOn": "Printed on",
-        "page": "Page"
+        "page": "Page",
+        "columnNumber": "#"
     },
     "validation": {
         "medicationRequired": "Please enter the medication name.",

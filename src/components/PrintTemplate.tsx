@@ -41,7 +41,7 @@ export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
                     <span className="text-xs font-bold text-[#64748b] uppercase text-[#0369a1]">{t('print.done')}</span>
                     <span className="text-xs font-bold text-[#64748b] uppercase text-[#0369a1]">{t('print.date')}</span>
                     <span className="text-xs font-bold text-[#64748b] uppercase text-[#0369a1]">{t('print.time')}</span>
-                    <span className="text-xs font-bold text-[#64748b] uppercase text-center w-6">#</span>
+                    <span className="text-xs font-bold text-[#64748b] uppercase text-center w-6">{t('print.columnNumber')}</span>
                 </div>
 
                 {/* Rows */}

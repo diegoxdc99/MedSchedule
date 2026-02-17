@@ -3,7 +3,7 @@ import './i18n'
 import './index.css'
 import Navbar from './components/Navbar'
 import ConfigPanel from './components/ConfigPanel'
-import ScheduleTable from './components/ScheduleTable'
+import { ScheduleTable } from './components/ScheduleTable'
 import BackgroundDecoration from './components/BackgroundDecoration'
 import { useScheduleStore } from './store/useScheduleStore'
 

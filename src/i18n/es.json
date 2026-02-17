@@ -78,7 +78,8 @@
         "done": "Hecho",
         "footerQuote": "\"Un exterior saludable comienza desde el interior.\"",
         "printedOn": "Impreso el",
-        "page": "Página"
+        "page": "Página",
+        "columnNumber": "#"
     },
     "validation": {
         "medicationRequired": "Por favor ingresa el nombre del medicamento.",
