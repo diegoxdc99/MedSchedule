@@ -60,7 +60,6 @@ export const ScheduleTable = () => {
                     prescriptionDetails={prescriptionDetails}
                     doses={doses}
                     layout={printLayout}
-                    rowsPerPage={13} // Pass explicit rows per page if needed
                 />
             </div>
 
