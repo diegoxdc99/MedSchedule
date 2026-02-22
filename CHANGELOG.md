@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/diegoxdc99/MedSchedule/compare/v1.1.1...v1.1.2) (2026-02-22)
+
+
+### Bug Fixes
+
+* **pdf:** improve print template layout, alignment and row pagination ([#6](https://github.com/diegoxdc99/MedSchedule/issues/6)) ([9132bc5](https://github.com/diegoxdc99/MedSchedule/commit/9132bc54ecc2c63d2a32e7662aeb5a87492233fd))
+
 ## [1.1.1](https://github.com/diegoxdc99/MedSchedule/compare/v1.1.0...v1.1.1) (2026-02-22)
 
 
