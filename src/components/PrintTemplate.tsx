@@ -56,10 +56,7 @@ export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
         const probeColHeaderRef = useRef<HTMLDivElement>(null)
 
         useLayoutEffect(() => {
-            if (rowsPerPage !== undefined) {
-                setComputedRows(rowsPerPage)
-                return
-            }
+            if (rowsPerPage !== undefined) return
             const main = probeMainRef.current
             const colHeader = probeColHeaderRef.current
             if (!main || !colHeader) return
@@ -77,7 +74,7 @@ export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
         const formatTime = (date: Date) => format(date, 'hh:mm a', { locale: dateLocale })
 
         // Shared column header — mirrors exact column widths used in rows
-        const ColHeader = ({ innerRef }: { innerRef?: React.Ref<HTMLDivElement> }) => (
+        const renderColHeader = (innerRef?: React.Ref<HTMLDivElement>) => (
             <div ref={innerRef} className="flex gap-2 px-2 py-1.5 rounded-lg border border-[#e0f2fe] bg-[rgba(224,242,254,0.5)]">
                 <div className="w-8 shrink-0 flex justify-center">
                     <span className="text-[10px] font-bold uppercase text-[#0369a1]">{t('print.done')}</span>
@@ -88,7 +85,7 @@ export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
             </div>
         )
 
-        const Header = ({ innerRef }: { innerRef?: React.Ref<HTMLDivElement> }) => (
+        const renderHeader = (innerRef?: React.Ref<HTMLDivElement>) => (
             <div ref={innerRef} className="flex justify-between items-start border-b-2 border-[#e2e8f0] pb-4 mb-4 shrink-0 relative z-10">
                 {/* Left: logo + patient */}
                 <div className="flex flex-col gap-1">
@@ -134,7 +131,7 @@ export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
             </div>
         )
 
-        const Footer = ({ pageIndex, totalPages }: { pageIndex: number; totalPages: number }) => (
+        const renderFooter = (pageIndex: number, totalPages: number) => (
             <div className="flex items-center justify-between border-t border-[#e2e8f0] pt-3 mt-3 shrink-0 relative z-10">
                 <div className="flex items-center gap-1 text-[11px] text-[#94a3b8] font-medium">
                     <span className="material-icons-round text-xs">print</span>
@@ -157,12 +154,12 @@ export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
             return (
                 <div ref={ref} style={{ position: 'fixed', top: -9999, left: -9999, visibility: 'hidden', pointerEvents: 'none' }}>
                     <div className={PAGE_CLS}>
-                        <Header />
+                        {renderHeader()}
                         {/* flex-1 main — its clientHeight is exactly the space left for rows */}
                         <div ref={probeMainRef} className="flex-1 min-h-0">
-                            <ColHeader innerRef={probeColHeaderRef} />
+                            {renderColHeader(probeColHeaderRef)}
                         </div>
-                        <Footer pageIndex={0} totalPages={1} />
+                        {renderFooter(0, 1)}
                     </div>
                 </div>
             )
@@ -177,7 +174,7 @@ export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
 
         const renderColumn = (colDoses: Dose[]) => (
             <div className="flex flex-col gap-1 w-full">
-                <ColHeader />
+                {renderColHeader()}
                 {colDoses.map((dose) => (
                     // py-[8px] + text-sm (20px line-height) = 36px total row height
                     // Padding centers the text without needing CSS centering tricks
@@ -221,7 +218,7 @@ export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
                             <div className="absolute top-0 right-0 w-64 h-64 bg-[#f0f9ff] rounded-bl-full -mr-16 -mt-16 z-0 pointer-events-none opacity-60" />
                             <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#f0f9ff] rounded-tr-full -ml-12 -mb-12 z-0 pointer-events-none opacity-60" />
 
-                            <Header />
+                            {renderHeader()}
 
                             {/* Main — flex-1 fills the exact space between header and footer */}
                             <main className="flex-1 min-h-0 overflow-hidden relative z-10">
@@ -232,7 +229,7 @@ export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
                                 </div>
                             </main>
 
-                            <Footer pageIndex={pageIndex} totalPages={totalPages} />
+                            {renderFooter(pageIndex, totalPages)}
                         </div>
                     )
                 })}
