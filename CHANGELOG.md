@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/diegoxdc99/MedSchedule/compare/v1.1.0...v1.1.1) (2026-02-22)
+
+
+### Bug Fixes
+
+* **pdf:** reduce file size and improve print quality ([#5](https://github.com/diegoxdc99/MedSchedule/issues/5)) ([702c9dd](https://github.com/diegoxdc99/MedSchedule/commit/702c9dd25a6c5302f5dd691734146f458b2e653e))
+
 # [1.1.0](https://github.com/diegoxdc99/MedSchedule/compare/v1.0.0...v1.1.0) (2026-02-17)
 
 
