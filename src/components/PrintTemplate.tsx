@@ -46,7 +46,7 @@ export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
 
                 {/* Rows */}
                 {colDoses.map((dose) => (
-                    <div key={dose.id} className="flex items-center p-3 rounded-lg border border-[#f1f5f9] bg-[#ffffff] shadow-[0_1px_2px_rgba(0,0,0,0.05)] break-inside-avoid">
+                    <div key={dose.id} className="flex items-center p-3 rounded-lg border border-[#e2e8f0] bg-[#ffffff] break-inside-avoid">
                         <div className="w-8 flex justify-center">
                             <div className="w-6 h-6 rounded-full border-2 border-[#e2e8f0]"></div>
                         </div>
@@ -81,10 +81,10 @@ export const PrintTemplate = forwardRef<HTMLDivElement, PrintTemplateProps>(
                             <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#f0f9ff] rounded-tr-full -ml-12 -mb-12 z-0 pointer-events-none opacity-60"></div>
 
                             {/* Header */}
-                            <header className="relative z-10 flex justify-between items-start mb-8 border-b-2 border-dashed border-[#f1f5f9] pb-6">
+                            <header className="relative z-10 flex justify-between items-start mb-8 border-b-2 border-[#e2e8f0] pb-6">
                                 <div className="flex flex-col gap-1">
                                     <div className="flex items-center gap-3 mb-2">
-                                        <div className="w-10 h-10 rounded-xl bg-[#38bdf8] flex items-center justify-center text-white shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+                                        <div className="w-10 h-10 rounded-xl bg-[#38bdf8] flex items-center justify-center text-white">
                                             <span className="material-icons-round text-2xl">medication_liquid</span>
                                         </div>
                                         <div>
