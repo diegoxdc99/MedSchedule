@@ -14,15 +14,17 @@ export const usePdfExport = () => {
             // Find all page sheets
             const pages = element.querySelectorAll('.print-sheet') as NodeListOf<HTMLElement>
 
+            const canvasOptions = {
+                scale: 3,
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#ffffff',
+            }
+
             if (pages.length === 0) {
                 // Fallback: print the container itself if no sheets found
-                const canvas = await html2canvas(element, {
-                    scale: 2,
-                    useCORS: true,
-                    logging: false,
-                    backgroundColor: '#ffffff'
-                })
-                const imgData = canvas.toDataURL('image/png')
+                const canvas = await html2canvas(element, canvasOptions)
+                const imgData = canvas.toDataURL('image/jpeg', 0.92)
                 const pdf = new jsPDF({
                     orientation: 'portrait',
                     unit: 'mm',
@@ -30,7 +32,7 @@ export const usePdfExport = () => {
                 })
                 const pdfWidth = pdf.internal.pageSize.getWidth()
                 const pdfHeight = (canvas.height * pdfWidth) / canvas.width
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
+                pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight)
                 pdf.save(`${fileName}.pdf`)
                 return
             }
@@ -45,20 +47,15 @@ export const usePdfExport = () => {
                 const page = pages[i]
 
                 // Capture each page
-                const canvas = await html2canvas(page, {
-                    scale: 2,
-                    useCORS: true,
-                    logging: false,
-                    backgroundColor: '#ffffff'
-                })
+                const canvas = await html2canvas(page, canvasOptions)
 
-                const imgData = canvas.toDataURL('image/png')
+                const imgData = canvas.toDataURL('image/jpeg', 0.92)
                 const pdfWidth = pdf.internal.pageSize.getWidth()
                 const pdfHeight = (canvas.height * pdfWidth) / canvas.width
 
                 // Add page to PDF
                 if (i > 0) pdf.addPage()
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
+                pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight)
             }
 
             pdf.save(`${fileName}.pdf`)
